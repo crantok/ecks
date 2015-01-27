@@ -1,0 +1,17 @@
+{
+    "name": "ecks/ecks",
+    "description": "An array decorator that adds a fluid functional interface similar to that of an Array in Ruby. Inspired by underscore.php.",
+    "license": "GPL3",
+    "authors": [
+        {
+            "name": "Justin Hellings",
+            "email": "justin.hellings@gmail.com"
+        }
+    ],
+    "require": {}
+
+    "autoload": {
+        "psr-0": { "Ecks": "src/" },
+        "files": ["src/ecks.php"]
+    }
+}
