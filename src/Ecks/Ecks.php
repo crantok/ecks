@@ -1,6 +1,6 @@
 <?php
 
-namespace Rpb\Adapters;
+namespace Ecks;
 
 
 use Ecks\KeyValuePair;
