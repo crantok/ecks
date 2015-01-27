@@ -40,6 +40,6 @@ abstract class ArrayDecorator implements IteratorAggregate, ArrayAccess
 
     public function asArray()
     {
-        return decoratedArray();
+        return $this->decoratedArray();
     }
 }
