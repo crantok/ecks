@@ -2,57 +2,60 @@
 
 namespace Ecks;
 
-
-use IteratorAggregate;
-use ArrayAccess;
 use ArrayIterator;
 
-
-abstract class ArrayDecorator implements IteratorAggregate, ArrayAccess
+// ArrayDecorator (trait)
+//
+// Effectively implements IteratorAggregate and ArrayAccess but, being a trait,
+// it can't explicitly state this. If you need these interfaces to be
+// implemented by your class then you can do this:
+//
+//  class MyClass implements IteratorAggregate, ArrayAccess
+//  {
+//      use ArrayDecorator;
+//      ....
+//
+// And then implement the abstract methods: internalArray() and asArray()
+//
+trait ArrayDecorator
 {
-    abstract protected function decoratedArray();
-    abstract protected function asArrayMethodName();
+    // Allow the Array decorator to see the internal array or array-like thing.
+    abstract protected function internalArray();
+
+    // Provide public read access to a representation of the class as a "native"
+    // PHP array. Intended to enable client code to make use of PHP's global
+    // array functions.
+    abstract public function asArray();
 
 
     public function getIterator() {
-        return new ArrayIterator( is_null($this->decoratedArray()) ? [] : $this->decoratedArray() );
+        $internal_array = $this->internalArray();
+        return new ArrayIterator( $internal_array ? $internal_array : [] );
     }
+
 
     public function offsetExists( $offset )
     {
-        return array_key_exists( $this->decoratedArray(), $offset);
+        return array_key_exists( $this->internalArray(), $offset);
     }
+
     public function offsetGet( $offset )
     {
-        return $this->decoratedArray()[$offset];
+        return $this->internalArray()[$offset];
     }
+
     public function offsetSet( $offset, $value )
     {
         // Check for a Null offset because $array[] not the same as $array[null]
         if (is_null($offset)) {
-            $this->decoratedArray()[] = $value;
+            $this->internalArray()[] = $value;
         } else {
-            $this->decoratedArray()[$offset] = $value;
+            $this->internalArray()[$offset] = $value;
         }
     }
+
     public function offsetUnset( $offset )
     {
-        unset( $this->decoratedArray()[$offset] );
-    }
-
-    public function asArray()
-    {
-        $decorated_array = $this->decoratedArray();
-
-        if ( is_array( $decorated_array ) ) {
-            return $decorated_array;
-        }
-        elseif ( $this->asArrayMethodName() ) {
-            $method_name = $this->asArrayMethodName();
-            return $decorated_array->$method_name();
-        }
-        else {
-            return NULL;
-        }
+        unset( $this->internalArray()[$offset] );
     }
 }

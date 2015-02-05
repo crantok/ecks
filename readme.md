@@ -2,6 +2,7 @@ Ecks is...
 
  * inspired by underscore.php
  * far from complete
+ * highly likely to be broken
 
 Ecks will be great because...
 
