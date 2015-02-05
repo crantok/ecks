@@ -3,7 +3,7 @@
 use Ecks\Ecks;
 
 
-function ecks( $thing )
+function ecks( $thing, $as_array_method_name=NULL )
 {
-    return new Ecks($thing);
+    return new Ecks($thing, $as_array_method_name );
 }

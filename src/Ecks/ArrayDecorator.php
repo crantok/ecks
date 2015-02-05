@@ -11,6 +11,8 @@ use ArrayIterator;
 abstract class ArrayDecorator implements IteratorAggregate, ArrayAccess
 {
     abstract protected function decoratedArray();
+    abstract protected function asArrayMethodName();
+
 
     public function getIterator() {
         return new ArrayIterator( is_null($this->decoratedArray()) ? [] : $this->decoratedArray() );
@@ -40,6 +42,17 @@ abstract class ArrayDecorator implements IteratorAggregate, ArrayAccess
 
     public function asArray()
     {
-        return $this->decoratedArray();
+        $decorated_array = $this->decoratedArray();
+
+        if ( is_array( $decorated_array ) ) {
+            return $decorated_array;
+        }
+        elseif ( $this->asArrayMethodName() ) {
+            $method_name = $this->asArrayMethodName();
+            return $decorated_array->$method_name();
+        }
+        else {
+            return NULL;
+        }
     }
 }
