@@ -21,5 +21,7 @@ class EcksTest extends PHPUnit_Framework_TestCase
         $y = ecks( new PretendArray, "aBigPie" )->asArray();
         $this->assertEquals( $y, [2,4,7] );
 
+        $z = ecks( [2,4,7] )->asArray();
+        $this->assertEquals( $z, [2,4,7] );
     }
 }
