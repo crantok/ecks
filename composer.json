@@ -8,7 +8,6 @@
             "email": "justin.hellings@gmail.com"
         }
     ],
-    "version": "0.0.1",
 
     "require-dev": {
         "phpunit/phpunit" : "4.*"
