@@ -7,6 +7,7 @@ Ecks is...
 Ecks will be great because...
 
  * it will have a "fluid" (i.e. call-chaining) interface, but without underscore.php's need for chain() and value() methods
+ * it provides a KeyValuePair class which callbacks may return. Unlike underscore.php, this can give client code control over the indexing of a result array
  * instances of Ecks will be (almost, see below) interchangeable with arrays
  * it includes an array decorator (which implements Ecks' array interchangeability) that you can reuse for your own classes
 
