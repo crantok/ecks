@@ -11,7 +11,7 @@ class Ecks implements IteratorAggregate, ArrayAccess
     use ArrayDecorator;
 
     private $thing = NULL;
-    protected function internalArray() { return $this->thing; }
+    protected function &arrayRef() { return $this->thing; }
 
     private $thingAsArrayMethodName = NULL;
 

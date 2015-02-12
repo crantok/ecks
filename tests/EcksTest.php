@@ -18,10 +18,14 @@ class EcksTest extends PHPUnit_Framework_TestCase
     {
         $x = ecks([]);
 
-        $y = ecks( new PretendArray, "aBigPie" )->asArray();
-        $this->assertEquals( $y, [2,4,7] );
+        $x = ecks( new PretendArray, "aBigPie" );
+        $this->assertEquals( $x->asArray(), [2,4,7] );
 
-        $z = ecks( [2,4,7] )->asArray();
-        $this->assertEquals( $z, [2,4,7] );
+        $x = ecks( [2,4,7] );
+        $this->assertEquals( $x->asArray(), [2,4,7] );
+
+        $x = ecks( [2,4,7] );
+        $x[1] = 5;
+        $this->assertEquals( $x->asArray(), [2,5,7] );
     }
 }
