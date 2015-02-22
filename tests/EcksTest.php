@@ -24,6 +24,9 @@ class EcksTest extends PHPUnit_Framework_TestCase
         $x = ecks( [2,4,7] );
         $this->assertEquals( $x->asArray(), [2,4,7] );
 
+        $x = ecks( $x, "some rubbish" );
+        $this->assertEquals( $x->asArray(), [2,4,7] );
+
         $x = ecks( [2,4,7] );
         $x[1] = 5;
         $this->assertEquals( $x->asArray(), [2,5,7] );
