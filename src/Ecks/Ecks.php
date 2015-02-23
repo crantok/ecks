@@ -44,6 +44,12 @@ class Ecks implements IteratorAggregate, ArrayAccess
 
     // And now for the fun stuff...
 
+    // Build an array that may containing any values, and that maps 1:1 to
+    // the input array.
+    // The callback may return a KeyValuePair for more control over the results.
+    //
+    // Callback params: ( value, key, original array )
+    //
     function map( $callback )
     {
         $results = [];
@@ -56,6 +62,34 @@ class Ecks implements IteratorAggregate, ArrayAccess
                 $results[ $result->key ] = $result->value;
             }
             else {
+                $results[] = $result;
+            }
+        }
+
+        $this->setThing( $results );
+        return $this;
+    }
+
+    // Different from underscore filter() !
+    //
+    // Anything truthy returned from the callback is added to the results.
+    // If the callback return TRUE, then TRUE is added to the results!
+    // Just like with map(), a KeyValuePair can be used for more control.
+    //
+    // Callback params: ( value, key, original array )
+    //
+    function filter( $callback )
+    {
+        $results = [];
+
+        foreach ( $this->thing as $key => $value ) {
+
+            $result = $callback( $value, $key, $this->thing );
+
+            if ( $result instanceof KeyValuePair ) {
+                $results[ $result->key ] = $result->value;
+            }
+            elseif ( $result ) {
                 $results[] = $result;
             }
         }
