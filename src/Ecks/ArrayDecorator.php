@@ -6,11 +6,11 @@ use ArrayIterator;
 
 // ArrayDecorator (trait)
 //
-// Effectively implements IteratorAggregate and ArrayAccess but, being a trait,
-// it can't explicitly state this. If you need these interfaces to be
-// implemented by your class then you can do this:
+// Effectively implements IteratorAggregate, ArrayAccess and Countable but,
+// being a trait, it can't explicitly state this. If you need these interfaces
+// to be implemented by your class then you can do this:
 //
-//  class MyClass implements IteratorAggregate, ArrayAccess
+//  class MyClass implements IteratorAggregate, ArrayAccess, Countable
 //  {
 //      use ArrayDecorator;
 //      ....
@@ -60,5 +60,10 @@ trait ArrayDecorator
     public function offsetUnset( $offset )
     {
         unset( $this->arrayRef()[$offset] );
+    }
+
+    public function count()
+    {
+        return count($this->arrayRef());
     }
 }

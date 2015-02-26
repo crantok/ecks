@@ -4,9 +4,10 @@ namespace Ecks;
 
 use IteratorAggregate;
 use ArrayAccess;
+use Countable;
 
 
-class Ecks implements IteratorAggregate, ArrayAccess
+class Ecks implements IteratorAggregate, ArrayAccess, Countable
 {
     use ArrayDecorator;
 

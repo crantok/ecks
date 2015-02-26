@@ -19,22 +19,24 @@ class EcksTest extends PHPUnit_Framework_TestCase
         $x = ecks([]);
 
         $x = ecks( new PretendArray, "aBigPie" );
-        $this->assertEquals( $x->asArray(), [2,4,7] );
+        $this->assertEquals( [2,4,7], $x->asArray() );
 
         $x = ecks( [2,4,7] );
-        $this->assertEquals( $x->asArray(), [2,4,7] );
+        $this->assertEquals( [2,4,7], $x->asArray() );
 
         $x = ecks( $x, "some rubbish" );
-        $this->assertEquals( $x->asArray(), [2,4,7] );
+        $this->assertEquals( [2,4,7], $x->asArray() );
 
         $x = ecks( [2,4,7] );
         $x[1] = 5;
-        $this->assertEquals( $x->asArray(), [2,5,7] );
+        $this->assertEquals( [2,5,7], $x->asArray() );
 
         $x = ecks( [2,4,7] )->map( function($val){return $val+1;});
-        $this->assertEquals( $x->asArray(), [3,5,8] );
+        $this->assertEquals( [3,5,8], $x->asArray() );
 
         $x = ecks( [2,4,7] )->filter( function($val){return $val>3 ? $val+1 : NULL;});
-        $this->assertEquals( $x->asArray(), [5,8] );
+        $this->assertEquals( [5,8], $x->asArray() );
+        $this->assertEquals( 2, count($x) );
+        $this->assertEquals( 2, $x->count() );
     }
 }
