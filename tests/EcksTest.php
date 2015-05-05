@@ -35,7 +35,7 @@ class EcksTest extends PHPUnit_Framework_TestCase
         $this->assertEquals( [3,5,8], $x->asArray() );
 
         $x = ecks( [2,4,7] )->filter( function($val){return $val>3 ? $val+1 : NULL;});
-        $this->assertEquals( [5,8], $x->asArray() );
+        $this->assertEquals( [4,7], $x->asArray() );
         $this->assertEquals( 2, count($x) );
         $this->assertEquals( 2, $x->count() );
     }
