@@ -15,7 +15,7 @@ use ArrayIterator;
 //      use ArrayDecorator;
 //      ....
 //
-// And then implement the abstract methods: internalArray() and asArray()
+// And then implement the abstract methods: &arrayRef() and asArray()
 //
 trait ArrayDecorator
 {

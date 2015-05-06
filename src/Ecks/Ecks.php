@@ -113,14 +113,57 @@ class Ecks implements IteratorAggregate, ArrayAccess, Countable
         return $this;
     }
 
-    // Unlike PHP's array_diff and array_udiff functions, this method is NOT
-    // order dependent
-    function diff( $other, $callback )
+
+
+    // Return the a KeyValuePair for the first item passing the recursively
+    // applied truth iterator test.
+    //
+    // Recursion is applied where an element is Traversable, or an array, or
+    // returns one of the same through the supplied child method.
+    //
+    // Callback params: ( value, key, original array )
+    //
+    public function recursiveFind( $callback, $child_method=null)
     {
-        $raw_other = is_array( $other ) ? $other : $other->asArray();
+        $is_foreachable = function ( $collection ) {
+            return is_array( $collection ) || $collection instanceof Traversable;
+        };
 
-        $results = [];
+        $rf = function ( $collection, $indent=0 ) use ( $callback, $child_method, &$rf, $is_foreachable )
+        {
+            foreach( $collection as $key => $value ) {
 
-        // TO DO: You know, like, write the method.
+                $result = $callback( $value, $key, $collection );
+
+                if ( $result ) {
+                    return new KeyValuePair( $key, $value );
+                }
+                elseif ( $child_method && method_exists( $value, $child_method )  ) {
+                    $child_result = $rf( $value->$child_method(), $indent+4 );
+                    if ( $child_result ) { return $child_result; }
+                }
+                elseif ( $is_foreachable( $value ) ) {
+                    $child_result = $rf( $value, $indent+4 );
+                    if ( $child_result ) { return $child_result; }
+                }
+            }
+
+            return NULL;
+        };
+
+        return $rf( $this->thing );
     }
+
+
+
+    // // Unlike PHP's array_diff and array_udiff functions, this method is NOT
+    // // order dependent
+    // function diff( $other, $callback )
+    // {
+    //     $raw_other = is_array( $other ) ? $other : $other->asArray();
+    //
+    //     $results = [];
+    //
+    //     // TO DO: You know, like, write the method.
+    // }
 }
