@@ -17,6 +17,7 @@ class Ecks implements IteratorAggregate, ArrayAccess, Countable
     private $thingAsArrayMethodName = NULL;
 
 
+
     function __construct( $thing, $as_array_method_name=NULL )
     {
         $this->setThing( $thing, $as_array_method_name );
@@ -42,6 +43,9 @@ class Ecks implements IteratorAggregate, ArrayAccess, Countable
         }
     }
 
+    private function arrayCopy() {
+        return ecks($this->thing)->map( function($v){return $v;}, TRUE );
+    }
 
     // And now for the fun stuff...
 
@@ -66,7 +70,11 @@ class Ecks implements IteratorAggregate, ArrayAccess, Countable
     // Callback params: ( value, key, original array )
     // Callback returns: a value or a KeyValuePair
     //
-    function map( $callback )
+    // $preserve_keys_for_raw_values : Only applicable when callback returns a
+    // plain value rather than a KeyValuePair. Preserves original keys in the
+    // new array.
+    //
+    function map( $callback, $preserve_keys_for_raw_values=FALSE )
     {
         $results = [];
 
@@ -76,6 +84,9 @@ class Ecks implements IteratorAggregate, ArrayAccess, Countable
 
             if ( $result instanceof KeyValuePair ) {
                 $results[ $result->key ] = $result->value;
+            }
+            elseif ( $preserve_keys_for_raw_values ) {
+                $results[$key] = $result;
             }
             else {
                 $results[] = $result;
@@ -185,6 +196,29 @@ class Ecks implements IteratorAggregate, ArrayAccess, Countable
         };
 
         return $rf( $this->thing );
+    }
+
+
+
+    // Build a new array sorted by the values returned by the callback.
+    //
+    // Values returned by the callback will be sorted using the PHP asort() fn.
+    // The original array will be reordered in accordance with the sorted values.
+    //
+    // Callback params: ( value, key, original array )
+    // Callback returns: a value
+    //
+    public function sortBy( $callback )
+    {
+        $sortable = $this->arrayCopy()->map( $callback, $preserve_keys=TRUE )->asArray();
+        asort( $sortable );
+
+        $result = ecks($sortable)->map( function ( $val, $key ) {
+            return new KeyValuePair( $key, $this->thing[$key] );
+        } );
+
+        $this->setThing( $result->asArray() );
+        return $this;
     }
 
 
