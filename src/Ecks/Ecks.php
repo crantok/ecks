@@ -115,10 +115,27 @@ class Ecks implements IteratorAggregate, ArrayAccess, Countable
 
 
 
+    // Return TRUE if an item passes the given test, else FALSE.
+    //
+    // Callback params: ( value, key, original array )
+    //
+    public function any( $callback )
+    {
+        foreach ( $this->thing as $key => $value ) {
+
+            if ( $callback( $value, $key, $this->thing ) ) {
+                return TRUE;
+            }
+        }
+        return FALSE;
+    }
+
+
+
     // Return the a KeyValuePair for the first item passing the recursively
     // applied truth iterator test.
     //
-    // Recursion is applied where an element is Traversable, or an array, or
+    // Recursion is applied where an element is Traversable, or is an array, or
     // returns one of the same through the supplied child method.
     //
     // Callback params: ( value, key, original array )

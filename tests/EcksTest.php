@@ -60,5 +60,8 @@ class EcksTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf( 'Ecks\KeyValuePair', $x );
         $this->assertEquals( 'x', $x->key );
         $this->assertEquals( 'muppet', $x->value );
+
+        $this->assertTrue( ecks([2,4,7])->any( function($val){return $val==2;} ) );
+        $this->assertFalse( ecks([2,4,7])->any( function($val){return $val==13;} ) );
     }
 }
