@@ -63,5 +63,12 @@ class EcksTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue( ecks([2,4,7])->any( function($val){return $val==2;} ) );
         $this->assertFalse( ecks([2,4,7])->any( function($val){return $val==13;} ) );
+
+        $x = ecks([2,4,7])->find( function($val){return $val%4==0;} );
+        $this->assertInstanceOf( 'Ecks\KeyValuePair', $x );
+        $this->assertEquals( 1, $x->key );
+        $this->assertEquals( 4, $x->value );
+
+        $this->assertNull( ecks([2,4,7])->find( function($val){return $val==13;} ) );
     }
 }

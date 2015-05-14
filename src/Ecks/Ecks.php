@@ -64,6 +64,7 @@ class Ecks implements IteratorAggregate, ArrayAccess, Countable
     // the input array.
     //
     // Callback params: ( value, key, original array )
+    // Callback returns: a value or a KeyValuePair
     //
     function map( $callback )
     {
@@ -85,6 +86,7 @@ class Ecks implements IteratorAggregate, ArrayAccess, Countable
         return $this;
     }
 
+
     // Build an array containing values for which the callback function returns
     // a truthy result.
     //
@@ -92,6 +94,7 @@ class Ecks implements IteratorAggregate, ArrayAccess, Countable
     // truthy result, even if the value in the KeyValuePair is falsey.
     //
     // Callback params: ( value, key, original array )
+    // Callback returns: TRUE or FALSE or a KeyValuePair
     //
     function filter( $callback )
     {
@@ -114,20 +117,32 @@ class Ecks implements IteratorAggregate, ArrayAccess, Countable
     }
 
 
-
-    // Return TRUE if an item passes the given test, else FALSE.
+    // Return the first key-value pair that passes the given test, else NULL.
     //
     // Callback params: ( value, key, original array )
+    // Callback returns: TRUE or FALSE
     //
-    public function any( $callback )
+    public function find( $callback )
     {
         foreach ( $this->thing as $key => $value ) {
 
             if ( $callback( $value, $key, $this->thing ) ) {
-                return TRUE;
+                return new KeyValuePair( $key, $value );
             }
         }
-        return FALSE;
+        return NULL;
+    }
+
+
+
+    // Return TRUE if an element passes the given test, else FALSE.
+    //
+    // Callback params: ( value, key, original array )
+    // Callback returns: TRUE or FALSE
+    //
+    public function any( $callback )
+    {
+        return $this->find( $callback ) ? TRUE : FALSE;
     }
 
 
@@ -139,6 +154,7 @@ class Ecks implements IteratorAggregate, ArrayAccess, Countable
     // returns one of the same through the supplied child method.
     //
     // Callback params: ( value, key, original array )
+    // Callback returns: TRUE or FALSE
     //
     public function recursiveFind( $callback, $child_method=null)
     {
