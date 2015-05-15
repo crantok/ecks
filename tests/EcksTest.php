@@ -72,9 +72,16 @@ class EcksTest extends PHPUnit_Framework_TestCase
         $this->assertNull( ecks([2,4,7])->find( function($val){return $val==13;} ) );
 
 
+        // [1,2,3,4,5,6,7,8,9] -> [3,6,9,1,4,7,2,5,8]
+        $x = ecks( [1,2,3,4,5,6,7,8,9] )->sortBy( function($val){return ''.($val%3).(int)($val/3);} )->asArray();
+        $this->assertEquals( [3,6,9,1,4,7,2,5,8], $x );
+        $this->assertEquals( [3,6,9,1,4,7,2,5,8], array_values($x) );
+        $this->assertEquals( [0,1,2,3,4,5,6,7,8], array_keys($x) );
+
+
         // [1,2,3,4,5,6,7,8,9]
         // -> [2=>3, 5=>6, 8=>9, 0=>1, 3=>4, 6=>7, 1=>2, 4=>5, 7=>8]
-        $x = ecks( [1,2,3,4,5,6,7,8,9] )->sortBy( function($val){return ''.($val%3).(int)($val/3);} )->asArray();
+        $x = ecks( [1,2,3,4,5,6,7,8,9] )->sortBy( function($val){return ''.($val%3).(int)($val/3);}, $preserve_keys=TRUE )->asArray();
 
         // This does NOT test ordering. It just tests that key value pairs are the same.
         $this->assertEquals( [1,2,3,4,5,6,7,8,9], $x );

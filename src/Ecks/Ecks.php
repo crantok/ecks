@@ -205,16 +205,28 @@ class Ecks implements IteratorAggregate, ArrayAccess, Countable
     // Values returned by the callback will be sorted using the PHP asort() fn.
     // The original array will be reordered in accordance with the sorted values.
     //
-    // Callback params: ( value, key, original array )
-    // Callback returns: a value
+    // Array keys are discarded by default. This means that the [0] index will
+    // return the first item in the result array. You can change this behaviour
+    // by turning on $preserve_keys. This will reorder the array for the
+    // purposes of foreach, etc, but the [0] will return whatever it did before.
     //
-    public function sortBy( $callback )
+    // Callback params: ( value, key, original array )
+    // Callback returns: A value for sort comparison.
+    //
+    // $preserve_keys : If true, change element ordering but do not change keys.
+    //
+    public function sortBy( $callback, $preserve_keys=FALSE )
     {
-        $sortable = $this->arrayCopy()->map( $callback, $preserve_keys=TRUE )->asArray();
+        $sortable = $this->arrayCopy()->map( $callback, TRUE )->asArray();
         asort( $sortable );
 
-        $result = ecks($sortable)->map( function ( $val, $key ) {
-            return new KeyValuePair( $key, $this->thing[$key] );
+        $result = ecks($sortable)->map( function ( $val, $key ) use ( $preserve_keys ) {
+            if ( $preserve_keys ) {
+                return new KeyValuePair( $key, $this->thing[$key] );
+            }
+            else {
+                return $this->thing[$key];
+            }
         } );
 
         $this->setThing( $result->asArray() );
