@@ -37,7 +37,7 @@ trait ArrayDecorator
 
     public function offsetExists( $offset )
     {
-        return array_key_exists( $this->arrayRef(), $offset);
+        return array_key_exists( $offset, $this->arrayRef() );
     }
 
     public function offsetGet( $offset )
