@@ -41,6 +41,14 @@ class EcksTest extends PHPUnit_Framework_TestCase
         $x[1] = 5;
         $this->assertEquals( [2,5,7], $x->asArray() );
 
+        $this->assertEmpty( ecks([]) );
+        $this->assertNotEmpty( ecks([2]) );
+
+        // Tests ArrayDecorator::offsetExists() :
+        $this->assertTrue( empty( ecks([])[0] ) );
+        $this->assertFalse( empty( ecks([2])[0] ) );
+
+
         $x = ecks( [2,4,7] )->map( function($val){return $val+1;});
         $this->assertEquals( [3,5,8], $x->asArray() );
 
