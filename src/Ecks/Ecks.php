@@ -146,7 +146,7 @@ class Ecks implements IteratorAggregate, ArrayAccess, Countable
 
 
 
-    // Return TRUE if an element passes the given test, else FALSE.
+    // Return TRUE if any element passes the given test, else FALSE.
     //
     // Callback params: ( value, key, original array )
     // Callback returns: TRUE or FALSE
@@ -154,6 +154,24 @@ class Ecks implements IteratorAggregate, ArrayAccess, Countable
     public function any( $callback )
     {
         return $this->find( $callback ) ? TRUE : FALSE;
+    }
+
+
+
+    // Return TRUE if all elements pass the given test, else FALSE.
+    //
+    // Callback params: ( value, key, original array )
+    // Callback returns: TRUE or FALSE
+    //
+    public function all( $callback )
+    {
+        // Implementation: Try to find an element that FAILS the given test.
+        // Logically, if one element fails the test then it cannot be true
+        // that all elements pass the test.
+
+        return $this->find( function ($value,$key,$arr) use ($callback) {
+            return ! $callback($value,$key,$arr);
+        } ) ? FALSE : TRUE;
     }
 
 
