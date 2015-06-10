@@ -82,6 +82,9 @@ class EcksTest extends PHPUnit_Framework_TestCase
 
         $this->assertNull( ecks([2,4,7])->find( function($val){return $val==13;} ) );
 
+        $this->assertEquals( 13, ecks([2,4,7])->reduce( function($red,$val){return $red+$val;}, 0 ) );
+        $this->assertEquals( 56, ecks([2,4,7])->reduce( function($red,$val){return $red*$val;}, 1 ) );
+        $this->assertEquals( [3,5,8], ecks([2,4,7])->reduce( function($red,$val){$red[]=$val+1; return$red;}, [] ) );
 
         // [1,2,3,4,5,6,7,8,9] -> [3,6,9,1,4,7,2,5,8]
         $x = ecks( [1,2,3,4,5,6,7,8,9] )->sortBy( function($val){return ''.($val%3).(int)($val/3);} )->asArray();

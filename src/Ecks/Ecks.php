@@ -252,6 +252,20 @@ class Ecks implements IteratorAggregate, ArrayAccess, Countable
     }
 
 
+    // Reduce the wrapped collection to a single value, starting from the first
+    // value in the collection.
+    //
+    // Callback params: ( reduction, value, key, original array )
+    // Callback returns: the reduced value
+    //
+    public function reduce( $callback, $reduction )
+    {
+        foreach ( $this->thing as $key => $value ) {
+            $reduction = $callback( $reduction, $value, $key, $this->thing );
+        }
+        return $reduction;
+    }
+
 
     // // Unlike PHP's array_diff and array_udiff functions, this method is NOT
     // // order dependent
